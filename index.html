@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>End of the Beginning</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Georgia", serif;
+  background: radial-gradient(#fff5ee, #f0dfd3);
+  color: #4b3f36;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* ===== ANIMATIONS ===== */
+.fade { animation: fade 1.2s ease forwards; }
+@keyframes fade {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pop { animation: pop 0.5s ease; }
+@keyframes pop {
+  50% { transform: scale(1.1); }
+}
+
+/* ===== FLOATING STICKERS ===== */
+.sticker {
+  position: fixed;
+  font-size: 1.6rem;
+  opacity: 0.5;
+  animation: float 10s linear infinite;
+}
+@keyframes float {
+  from { transform: translateY(110vh); }
+  to { transform: translateY(-10vh); }
+}
+
+/* ===== ARROWS ===== */
+.arrow {
+  font-size: 2.2rem;
+  cursor: pointer;
+  margin: 15px;
+  user-select: none;
+}
+.arrow:hover { transform: scale(1.2); }
+
+/* ===== GREETING ===== */
+#greeting {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(#fff5ee, #f3e0d2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+/* ===== ENVELOPE ===== */
+.envelope {
+  width: 200px;
+  height: 130px;
+  margin: 90px auto;
+  background: #c97c5d;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+.flap {
+  position: absolute;
+  width: 100%;
+  height: 60%;
+  top: 0;
+  background: #b56b4f;
+  border-radius: 20px 20px 0 0;
+  transform-origin: top;
+  transition: transform 1.2s ease;
+}
+.open .flap { transform: rotateX(180deg); }
+
+/* ===== LETTER ===== */
+#letter {
+  display: none;
+  max-width: 700px;
+  margin: auto;
+  background: #fff7ef;
+  padding: 35px;
+  border-radius: 26px;
+  text-align: left;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* ===== QUESTIONS ===== */
+#questions { display: none; max-width: 520px; margin: auto; }
+button {
+  padding: 14px 26px;
+  border: none;
+  border-radius: 18px;
+  background: #c97c5d;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px;
+}
+button:hover { background: #b56b4f; }
+
+/* ===== GALLERY ===== */
+#gallery { display: none; }
+.photo-block {
+  max-width: 430px;
+  margin: auto;
+}
+.photo-block img {
+  width: 100%;
+  border-radius: 26px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+}
+.caption {
+  margin-top: 15px;
+  font-style: italic;
+}
+
+/* ===== HEART BURST ===== */
+.heart {
+  position: fixed;
+  font-size: 1.2rem;
+  animation: burst 1.2s ease forwards;
+}
+@keyframes burst {
+  to {
+    transform: translateY(-120px) scale(0);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Stickers -->
+<div class="sticker" style="left:10%">🤍</div>
+<div class="sticker" style="left:30%;animation-delay:2s">🍂</div>
+<div class="sticker" style="left:50%;animation-delay:4s">✨</div>
+<div class="sticker" style="left:70%;animation-delay:1s">🍁</div>
+<div class="sticker" style="left:85%;animation-delay:3s">💌</div>
+
+<audio id="music" loop>
+  <source src="song.mp3">
+</audio>
+<audio id="click">
+  <source src="click.mp3">
+</audio>
+
+<!-- Greeting -->
+<div id="greeting" class="fade">
+  <h1>Happy New Year 🤍</h1>
+  <p><em>This isn’t an ending<br>it’s the end of the beginning</em></p>
+  <button onclick="start()">Continue →</button>
+</div>
+
+<!-- Envelope -->
+<div class="envelope fade" id="env" onclick="openEnvelope()">
+  <div class="flap"></div>
+  <p style="padding-top:50px;color:white">Tap to open 💌</p>
+</div>
+
+<!-- Letter -->
+<div id="letter" class="fade">
+  <p>Hey dumbo,</p>
+  <p>I know we didn't start the year together but I want to end it with you and all the years awaiting.</p>
+  <p>I want to be with you, learn and experience many more things together. Re watch Stranger Things and Harry Potter marathons, tease each other, see each other flaws, watch and support you through every cricket match, brag about you to my friends or maybe marry each other ahemm.</p>
+  <p>Even though it’s only been a few weeks every moment with you feels like something I’ve been waiting for.</p>
+  <p>Here’s to the end of the beginning and all that comes next.</p>
+  <p>Love,<br>Your Amine</p>
+  <div class="arrow" onclick="startQuestions()">→</div>
+</div>
+
+<!-- Questions -->
+<div id="questions" class="fade">
+  <h3 id="qText"></h3>
+  <div id="qButtons"></div>
+  <p id="reply"></p>
+</div>
+
+<!-- Gallery -->
+<div id="gallery" class="fade">
+  <div class="photo-block">
+    <img id="photo">
+    <p class="caption" id="caption"></p>
+  </div>
+  <div>
+    <span class="arrow" onclick="prevPhoto()">←</span>
+    <span class="arrow" onclick="nextPhoto()">→</span>
+  </div>
+</div>
+
+<script>
+function start(){
+  document.getElementById("greeting").style.display="none";
+  document.getElementById("music").play();
+}
+
+function openEnvelope(){
+  document.getElementById("click").play();
+  document.getElementById("env").classList.add("open");
+  setTimeout(()=>{
+    document.getElementById("env").style.display="none";
+    document.getElementById("letter").style.display="block";
+  },1200);
+}
+
+const qs=[
+ ["Up for Harry Potter and Stranger Things trivia someday?",
+  "Hell yeah, I am ready with my wand and demogorgon knowledge to beat you up"],
+ ["Ready to bear more of my mood swings?",
+  "I guess I’ll be more moody than"],
+ ["Can I be your grammar corrector forever?",
+  "Of course you chose yes baby, what would you do without me~"],
+ ["Wanna be stuck together forever?",
+  "I’m so glad we’re stuck together forever 🤍"]
+];
+let qi=0;
+
+function startQuestions(){
+  document.getElementById("letter").style.display="none";
+  document.getElementById("questions").style.display="block";
+  loadQ();
+}
+
+function loadQ(){
+  document.getElementById("qText").innerText=qs[qi][0];
+  document.getElementById("reply").innerText="";
+  document.getElementById("qButtons").innerHTML =
+    qi<3 ?
+    `<button onclick="answer()">Yes</button><button onclick="answer()">No</button>` :
+    `<button onclick="answer()">Yes</button>`;
+}
+
+function answer(){
+  heartBurst();
+  document.getElementById("reply").innerText=qs[qi][1];
+  qi++;
+  setTimeout(()=>{
+    if(qi<qs.length) loadQ();
+    else {
+      document.getElementById("questions").style.display="none";
+      showGallery();
+    }
+  },1400);
+}
+
+const photos=[
+ ["photo1.jpg","You asked me if I wanted my birthdate on your jersey. I thought it was cliche but I was more than happy."],
+ ["photo2.jpg","This was the first picture you gave me. I still keep it because you still look adorable."],
+ ["photo3.jpg","This is the only picture of us. I regret not clicking more, but that’s why I adore it."]
+];
+let pi=0;
+
+function showGallery(){
+  document.getElementById("gallery").style.display="block";
+  loadPhoto();
+}
+function loadPhoto(){
+  document.getElementById("photo").src=photos[pi][0];
+  document.getElementById("caption").innerText=photos[pi][1];
+}
+function nextPhoto(){ if(pi<photos.length-1){pi++; loadPhoto();}}
+function prevPhoto(){ if(pi>0){pi--; loadPhoto();}}
+
+function heartBurst(){
+  for(let i=0;i<8;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="🤍";
+    h.style.left=Math.random()*100+"vw";
+    h.style.top="70vh";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1200);
+  }
+}
+</script>
+
+</body>
+</html>
